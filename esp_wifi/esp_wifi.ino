@@ -90,7 +90,8 @@ void loop( )
           return;
         }
           webSocket.on( "news" , soketEvent );                      //Init soket event
-          webSocket.begin( "mytest-server.azurewebsites.net" );     //Start soket
+          webSocket.begin( "tranquil-stream-82241.herokuapp" );     //Start soket
+          webSocket.emit("indificate","id:esp1&identifier:wifi_power");
       }
    }
    else
@@ -224,7 +225,7 @@ bool ConnectToWiFi( )
   {
     Serial.print(".");
     delay(500);
-    if( requestCounet == 20 ) return false;                             //check if time end
+    if( requestCounter == 20 ) return false;                             //check if time end
     requestCounter++;
   }
   Serial.print( "\nConnected!" );
