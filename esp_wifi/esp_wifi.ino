@@ -90,7 +90,7 @@ void loop( )
           return;
         }
           webSocket.on( "news" , soketEvent );                      //Init soket event
-          webSocket.begin( "tranquil-stream-82241.herokuapp" );     //Start soket
+          webSocket.begin( "tranquil-stream-82241.herokuapp.com" );     //Start soket
           webSocket.emit("indificate","id:esp1&identifier:wifi_power");
       }
    }
