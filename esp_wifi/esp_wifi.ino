@@ -3,6 +3,7 @@
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 #include <ArduinoOTA.h>
+#include <EEPROM.h>
 #include <SocketIoClient.h>
 //**************** include ********************//
 
@@ -89,9 +90,9 @@ void loop( )
           isGetPassSSid = false;                                    //Lower the flag
           return;
         }
-          webSocket.on( "news" , soketEvent );                      //Init soket event
-          webSocket.begin( "tranquil-stream-82241.herokuapp.com" );     //Start soket
-          webSocket.emit("indificate","id:esp1&identifier:wifi_power");
+          webSocket.begin( "tranquil-stream-82241.herokuapp.com" );//Start soket
+          webSocket.emit("indificate","\"id:esp1&identifier:wifi_power\"");
+          webSocket.on( "news" , soketEvent );                       //Init soket event
       }
    }
    else
