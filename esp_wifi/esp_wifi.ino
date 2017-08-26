@@ -68,6 +68,10 @@ void setup( )
   ArduinoOTA.begin( );
   
   pinMode( LED , OUTPUT );                                        //Init LED pin
+
+  EEPROM.begin(100);
+  Serial.print("Chip ID:");
+  Serial.println(ESP.getChipId());
 }
 
 
@@ -88,11 +92,20 @@ void loop( )
           Serial.println( "Bad SSID or PASSWORD" );
           CreateWiFiAP( );                                          //If we can't connect to wifi againe create access pointer
           isGetPassSSid = false;                                    //Lower the flag
+          EEPROM.write(97, 0);
+          EEPROM.commit();
           return;
         }
-          webSocket.begin( "tranquil-stream-82241.herokuapp.com" );//Start soket
+          if(!EEPROM.read(97))
+          {
+            for(int i = 0 ; i < 32 ;i++) EEPROM.write(i, ssid[i]);
+            for(int i = 0 ; i < 64 ;i++) EEPROM.write(32 + i, password[i]);
+            EEPROM.write(97, 1);
+            EEPROM.commit();
+          }
+          webSocket.begin( "tranquil-stream-82241.herokuapp.com" ); //Start soket
           webSocket.emit("indificate","\"id:esp1&identifier:wifi_power\"");
-          webSocket.on( "news" , soketEvent );                       //Init soket event
+          webSocket.on( "news" , soketEvent );                      //Init soket event  
       }
    }
    else
@@ -109,6 +122,15 @@ void loop( )
 */
 bool ServerAP( )
 {
+  if(EEPROM.read(97) == 1)
+  {
+    Serial.println( "Use ssid and password from EEPROM");
+    for(int i = 0 ; i < 32 ;i++) ssid[i] = EEPROM.read(i);
+    for(int i = 0 ; i < 64 ;i++) password[i] = EEPROM.read(i + 32);
+    Serial.println( ssid );
+    Serial.println( password );
+    return true;
+  }
   ArduinoOTA.handle( );                                               //OTA server handle
   
   WiFiClient client = server.available( );                            //Checking the presence of the client
