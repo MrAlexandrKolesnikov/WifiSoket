@@ -70,7 +70,8 @@ void setup( )
   pinMode( LED , OUTPUT );                                        //Init LED pin
 
   EEPROM.begin(100);
-
+  Serial.print("Chip ID:");
+  Serial.println(ESP.getChipId());
 }
 
 
